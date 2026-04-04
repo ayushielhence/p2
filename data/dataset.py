@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
+import torch
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
@@ -73,26 +74,29 @@ def get_dataloaders(
     val_ds = PneumoniaMNIST(split="val", transform=transform_val, download=download, root=data_root)
     test_ds = PneumoniaMNIST(split="test", transform=transform_val, download=download, root=data_root)
 
+    # Pinned memory only helps async H2D for CUDA; MPS/CPU emit a warning if True.
+    pin_memory = torch.cuda.is_available()
+
     train_loader = DataLoader(
         train_ds,
         batch_size=batch_size,
         shuffle=True,
         num_workers=num_workers,
-        pin_memory=True,
+        pin_memory=pin_memory,
     )
     val_loader = DataLoader(
         val_ds,
         batch_size=batch_size,
         shuffle=False,
         num_workers=num_workers,
-        pin_memory=True,
+        pin_memory=pin_memory,
     )
     test_loader = DataLoader(
         test_ds,
         batch_size=batch_size,
         shuffle=False,
         num_workers=num_workers,
-        pin_memory=True,
+        pin_memory=pin_memory,
     )
 
     return train_loader, val_loader, test_loader
