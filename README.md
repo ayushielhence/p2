@@ -67,19 +67,20 @@ This prints accuracy, precision, recall, F1, ROC-AUC, and a classification repor
 <!-- RESULTS_TABLE_START -->
 | # | Model | Mode | ROC-AUC | F1 | Accuracy | Notes |
 |---|-------|------|---------|-----|----------|--------|
-| 1 | Custom CNN | scratch | | | | Run `python scripts/run_all_experiments.py` |
-| 2 | ResNet-18 | frozen | | | | |
-| 3 | ResNet-18 | finetune | | | | |
-| 4 | DenseNet-121 | finetune | | | | |
-| 5 | EfficientNet-B0 | finetune | | | | |
+| 1 | Custom CNN | scratch | 0.9651 | 0.9108 | 0.8798 | See `results/1_custom_cnn_scratch/` |
+| 2 | ResNet-18 | frozen | 0.9074 | 0.8704 | 0.8205 | See `results/2_resnet18_frozen/` |
+| 3 | ResNet-18 | finetune | 0.9818 | 0.9205 | 0.8926 | See `results/3_resnet18_finetune/` |
+| 4 | DenseNet-121 | finetune | 0.9673 | 0.9063 | 0.8718 | See `results/4_densenet121_finetune/` |
+| 5 | EfficientNet-B0 | finetune | 0.9724 | 0.9138 | 0.8830 | See `results/5_efficientnet_b0_finetune/` |
 <!-- RESULTS_TABLE_END -->
 
 ## Environment
 
 <!-- ENV_BLOCK_START -->
-- **Python:** (run `python scripts/run_all_experiments.py` to fill)
-- **PyTorch / CUDA:** 
-- **GPU:** 
+- **Python:** 3.12.10
+- **PyTorch:** 2.11.0
+- **CUDA (if any):** N/A (Apple Metal / MPS)
+- **Device:** MPS (Apple GPU)
 <!-- ENV_BLOCK_END -->
 
 ## Project layout
