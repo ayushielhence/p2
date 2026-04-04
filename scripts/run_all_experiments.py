@@ -39,10 +39,17 @@ def main() -> None:
         default=None,
         help="Comma-separated experiment numbers to run (1-5), e.g. 4,5 for the last two only",
     )
+    parser.add_argument(
+        "--config",
+        type=str,
+        default="configs/config.yaml",
+        help="YAML config passed to train.py and evaluate.py (use configs/config.fast.yaml for quicker Mac runs)",
+    )
     args = parser.parse_args()
-    extra_train: list[str] = []
+    extra_train: list[str] = ["--config", args.config]
     if args.epochs is not None:
-        extra_train = ["--epochs", str(args.epochs)]
+        extra_train += ["--epochs", str(args.epochs)]
+    extra_eval: list[str] = ["--config", args.config]
 
     experiments = list(EXPERIMENTS)
     if args.only:
@@ -67,6 +74,7 @@ def main() -> None:
             [
                 sys.executable,
                 str(ROOT / "training" / "evaluate.py"),
+                *extra_eval,
                 "--model",
                 model,
                 "--mode",
@@ -137,9 +145,15 @@ def main() -> None:
         import torch
 
         torch_ver = torch.__version__
-        cuda = torch.cuda.is_available()
-        cuda_str = torch.version.cuda if cuda else "N/A (CPU)"
-        device_str = torch.cuda.get_device_name(0) if cuda else "CPU"
+        if torch.cuda.is_available():
+            cuda_str = str(torch.version.cuda)
+            device_str = torch.cuda.get_device_name(0)
+        elif getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available():
+            cuda_str = "N/A (Apple Metal / MPS)"
+            device_str = "MPS (Apple GPU)"
+        else:
+            cuda_str = "N/A (no CUDA)"
+            device_str = "CPU"
     except Exception:
         torch_ver = "?"
         cuda_str = "?"
