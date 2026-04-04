@@ -1,0 +1,30 @@
+# Faster local runs (e.g. Mac CPU/MPS): fewer epochs, tighter early stopping, num_workers=0.
+# Use: python training/train.py ... --config configs/config.fast.yaml --epochs 15
+# Or:  python scripts/run_all_experiments.py --only 4,5 --config configs/config.fast.yaml --epochs 15
+
+training:
+  seed: 42
+  batch_size: 32
+  num_epochs: 25
+  num_epochs_frozen: 12
+  early_stopping_patience: 4
+  grad_clip_norm: 1.0
+
+optimizer:
+  type: adam
+  lr_scratch: 0.001
+  lr_finetune: 0.0001
+  weight_decay: 0.0001
+
+scheduler:
+  type: ReduceLROnPlateau
+  factor: 0.5
+  patience: 2
+
+data:
+  dataset: PneumoniaMNIST
+  download: true
+  num_workers: 0
+
+paths:
+  checkpoint_dir: checkpoints
