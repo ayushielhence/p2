@@ -33,7 +33,7 @@ from data.dataset import (  # noqa: E402
 )
 from models.factory import build_model  # noqa: E402
 from training.engine import run_epoch  # noqa: E402
-from utils.helpers import load_config, set_seed  # noqa: E402
+from utils.helpers import get_torch_device, load_config, set_seed  # noqa: E402
 
 
 def parse_args() -> argparse.Namespace:
@@ -80,7 +80,8 @@ def main() -> None:
         num_workers=num_workers,
     )
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = get_torch_device()
+    print(f"Device: {device}")
     model = build_model(args.model, args.mode).to(device)
 
     ckpt = Path(args.checkpoint)
